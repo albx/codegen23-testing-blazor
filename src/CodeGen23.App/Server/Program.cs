@@ -1,6 +1,8 @@
+using CodeGen23.App.Server;
 using CodeGen23.App.Server.Data;
 using CodeGen23.App.Server.Models;
-using CodeGen23.App.Shared;
+using CodeGen23.App.Server.Services;
+using CodeGen23.Core;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +14,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+builder.Services.AddDbContext<CodeGen23Context>(options => options.UseSqlServer(connectionString));
+
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -20,6 +24,8 @@ builder.Services.AddIdentityServer()
 
 builder.Services.AddAuthentication()
     .AddIdentityServerJwt();
+
+builder.Services.AddScoped<CardsService>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
@@ -52,22 +58,8 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();
-app.MapGet(
-    "/api/weatherforecast",
-    () =>
-    {
-        var Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
 
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        }).ToArray();
-    }).RequireAuthorization();
+app.MapGroup("cards").MapCardsEndpoints();
 
 app.MapFallbackToFile("index.html");
 
