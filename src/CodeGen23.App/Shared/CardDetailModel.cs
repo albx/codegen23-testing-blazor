@@ -9,9 +9,6 @@ public class CardDetailModel
     [Required]
     public string Title { get; set; } = string.Empty;
 
-    [Required]
-    public string IssuerName { get; set; } = string.Empty;
-
     public string? Description { get; set; }
 
     public DateTime CreationDate { get; set; }

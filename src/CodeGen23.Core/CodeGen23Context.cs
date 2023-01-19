@@ -16,9 +16,9 @@ public class CodeGen23Context : DbContext
         base.OnModelCreating(modelBuilder);
 
         var entityBuilder = modelBuilder.Entity<Card>();
+        entityBuilder.ToTable(nameof(Card));
         entityBuilder.HasKey(c => c.Id);
         entityBuilder.Property(c => c.Title).HasMaxLength(50).IsRequired();
         entityBuilder.Property(c => c.Description).HasMaxLength(255);
-        entityBuilder.Property(c => c.IssuerName).HasMaxLength(255).IsRequired();
     }
 }

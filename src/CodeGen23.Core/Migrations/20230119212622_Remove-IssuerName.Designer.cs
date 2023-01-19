@@ -4,6 +4,7 @@ using CodeGen23.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CodeGen23.Core.Migrations
 {
     [DbContext(typeof(CodeGen23Context))]
-    partial class CodeGen23ContextModelSnapshot : ModelSnapshot
+    [Migration("20230119212622_Remove-IssuerName")]
+    partial class RemoveIssuerName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -8,8 +8,6 @@ public class Card
 
     public string? Description { get; set; }
 
-    public string IssuerName { get; set; } = string.Empty;
-
     public DateTime CreationDate { get; set; }
 
     public CardStatus Status { get; set; }

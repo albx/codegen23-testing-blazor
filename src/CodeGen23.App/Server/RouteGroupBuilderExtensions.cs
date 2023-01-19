@@ -1,7 +1,6 @@
 ﻿using CodeGen23.App.Server.Services;
 using CodeGen23.App.Shared;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace CodeGen23.App.Server;
 
@@ -32,11 +31,11 @@ public static class RouteGroupBuilderExtensions
 
         source.MapPost(
             "/",
-            async ([FromBody] CreateCardModel model, CardsService service, ClaimsPrincipal user) =>
+            async ([FromBody] CreateCardModel model, CardsService service) =>
             {
                 try
                 {
-                    var cardId = await service.CreateCardAsync(model, user.Identity!);
+                    var cardId = await service.CreateCardAsync(model);
                     return Results.CreatedAtRoute("CardDetail", new { id = cardId }, model);
                 }
                 catch (InvalidOperationException)
@@ -47,39 +46,31 @@ public static class RouteGroupBuilderExtensions
 
         source.MapPut(
             "/{id}",
-            async (int id, [FromBody] CardDetailModel model, CardsService service, ClaimsPrincipal user) =>
+            async (int id, [FromBody] CardDetailModel model, CardsService service) =>
             {
                 try
                 {
-                    await service.UpdateCardAsync(id, model, user.Identity!);
+                    await service.UpdateCardAsync(id, model);
                     return Results.NoContent();
                 }
                 catch (ArgumentOutOfRangeException)
                 {
                     return Results.NotFound();
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    return Results.Forbid();
                 }
             }).RequireAuthorization();
 
         source.MapDelete(
             "/{id}",
-            async (int id, CardsService service, ClaimsPrincipal user) =>
+            async (int id, CardsService service) =>
             {
                 try
                 {
-                    await service.DeleteCardAsync(id, user.Identity!);
+                    await service.DeleteCardAsync(id);
                     return Results.NoContent();
                 }
                 catch (ArgumentOutOfRangeException)
                 {
                     return Results.NotFound();
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    return Results.Forbid();
                 }
             }).RequireAuthorization();
     }

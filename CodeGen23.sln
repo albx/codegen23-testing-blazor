@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGen23.App.Client", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGen23.App.Shared", "src\CodeGen23.App\Shared\CodeGen23.App.Shared.csproj", "{DB487774-2969-47C2-869C-F81AE0110418}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGen23.Core", "src\CodeGen23.Core\CodeGen23.Core.csproj", "{FBBAC586-80B2-433D-814E-2FC6173444D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGen23.Core", "src\CodeGen23.Core\CodeGen23.Core.csproj", "{FBBAC586-80B2-433D-814E-2FC6173444D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

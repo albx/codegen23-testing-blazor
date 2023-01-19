@@ -1,9 +1,84 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+@inject ICardsService Service
+@attribute [Authorize]
 
-<h1>Hello, world!</h1>
+<PageTitle>My Board</PageTitle>
 
-Welcome to your new app.
+<h1>My Board</h1>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<div class="row">
+    <CreateNewCard OnSave="CreateNewCardAsync"/>
+</div>
+<hr />
+<div class="row">
+    <div class="col col-cards">
+        <h5>To do</h5>
+        <hr />
+        @foreach (var card in model.ToDo)
+        {
+            <CardItem Card="card"/>
+        }
+    </div>
+    <div class="col col-cards">
+        <h5>In progress</h5>
+        <hr />
+        @foreach (var card in model.InProgress)
+        {
+            <CardItem Card="card" />
+        }
+    </div>
+    <div class="col col-cards">
+        <h5>Done</h5>
+        <hr />
+        @foreach (var card in model.Done)
+        {
+            <CardItem Card="card" />
+        }
+    </div>
+</div>
+
+@code {
+    private ViewModel model = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCardsAsync();
+    }
+
+    private async Task LoadCardsAsync()
+    {
+        var cards = await Service.GetCardsAsync();
+        if (cards.Any())
+        {
+            model.ToDo = cards.Where(c => c.Status == CardStatus.ToDo).Select(c => Map(c));
+            model.InProgress = cards.Where(c => c.Status == CardStatus.InProgress).Select(c => Map(c));
+            model.Done = cards.Where(c => c.Status == CardStatus.Done).Select(c => Map(c));
+        }
+    }
+
+    private CardViewModel Map(CardListItemModel card)
+        => new CardViewModel { Id = card.Id, Title = card.Title, CreationDate = card.CreationDate };
+
+    private async Task CreateNewCardAsync(CreateCardModel model)
+    {
+        try
+        {
+            await Service.CreateNewCardAsync(model);
+            await LoadCardsAsync();
+        }
+        catch (Exception ex)
+        {
+            //TODO
+        }
+    }
+
+    public class ViewModel
+    {
+        public IEnumerable<CardViewModel> ToDo { get; set; } = Enumerable.Empty<CardViewModel>();
+
+        public IEnumerable<CardViewModel> InProgress { get; set; } = Enumerable.Empty<CardViewModel>();
+
+        public IEnumerable<CardViewModel> Done { get; set; } = Enumerable.Empty<CardViewModel>();
+    }
+}

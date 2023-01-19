@@ -1,6 +1,5 @@
 ﻿using CodeGen23.App.Shared;
 using CodeGen23.Core;
-using System.Security.Principal;
 
 namespace CodeGen23.App.Server.Services;
 
@@ -21,7 +20,6 @@ public class CardsService
             {
                 Id = c.Id,
                 CreationDate = c.CreationDate,
-                IssuerName = c.IssuerName,
                 Status = (CardStatus)c.Status,
                 Title = c.Title
             }).ToArray();
@@ -41,27 +39,19 @@ public class CardsService
         {
             Id = card.Id,
             CreationDate = card.CreationDate,
-            IssuerName = card.IssuerName,
             Description = card.Description,
             Status = (CardStatus)card.Status,
             Title = card.Title
         };
     }
 
-    public async Task<int> CreateCardAsync(CreateCardModel model, IIdentity identity)
+    public async Task<int> CreateCardAsync(CreateCardModel model)
     {
-        var issuerName = identity.Name;
-        if (string.IsNullOrWhiteSpace(issuerName))
-        {
-            throw new InvalidOperationException("Empty user");
-        }
-
         var card = new Card
         {
             CreationDate = DateTime.Now,
             Description = model.Description,
             Title = model.Title,
-            IssuerName = issuerName,
             Status = Card.CardStatus.ToDo
         };
 
@@ -71,17 +61,12 @@ public class CardsService
         return card.Id;
     }
 
-    public Task UpdateCardAsync(int cardId, CardDetailModel model, IIdentity identity)
+    public Task UpdateCardAsync(int cardId, CardDetailModel model)
     {
         var card = Context.Cards.SingleOrDefault(c => c.Id == cardId);
         if (card is null)
         {
             throw new ArgumentOutOfRangeException();
-        }
-
-        if (card.IssuerName != identity.Name)
-        {
-            throw new UnauthorizedAccessException();
         }
 
         card.Title = model.Title;
@@ -91,17 +76,12 @@ public class CardsService
         return Context.SaveChangesAsync();
     }
 
-    public Task DeleteCardAsync(int cardId, IIdentity identity)
+    public Task DeleteCardAsync(int cardId)
     {
         var card = Context.Cards.SingleOrDefault(c => c.Id == cardId);
         if (card is null)
         {
             throw new ArgumentOutOfRangeException();
-        }
-
-        if (card.IssuerName != identity.Name)
-        {
-            throw new UnauthorizedAccessException();
         }
 
         Context.Cards.Remove(card);

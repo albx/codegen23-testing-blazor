@@ -1,0 +1,34 @@
+﻿<EditForm Model="model" OnValidSubmit="SubmitAsync" class="row" role="form">
+    <DataAnnotationsValidator />
+    <div class="col">
+        <label>Title</label>
+        <InputText class="form-control" @bind-Value="model.Title" />
+        <ValidationMessage For="@(() => model.Title)" class="text-danger" />
+    </div>
+    <div class="col">
+        <label>Description</label>
+        <InputText class="form-control" @bind-Value="model.Description" />
+        <ValidationMessage For="@(() => model.Description)" class="text-danger" />
+    </div>
+    <div class="col-auto" style="display: flex; align-items: end;">
+        <div class="btn-group" role="group">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" @onclick="Cancel" class="btn btn-outline-secondary">Cancel</button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public EventCallback<CreateCardModel> OnSave { get; set; }
+
+    private CreateCardModel model = new();
+
+    private async Task SubmitAsync()
+    {
+        await OnSave.InvokeAsync(model);
+        model = new();
+    }
+
+    private void Cancel() => model = new();
+}
