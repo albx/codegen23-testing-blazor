@@ -1,4 +1,5 @@
-﻿using CodeGen23.App.Shared;
+﻿using CodeGen23.App.Client.Model;
+using CodeGen23.App.Shared;
 using System.Net.Http.Json;
 
 namespace CodeGen23.App.Client.Services;
@@ -21,5 +22,11 @@ public class CardsHttpService : ICardsService
     public async Task<IEnumerable<CardListItemModel>> GetCardsAsync()
     {
         return await Client.GetFromJsonAsync<IEnumerable<CardListItemModel>>("cards") ?? Enumerable.Empty<CardListItemModel>();
+    }
+
+    public async Task ChangeCardStatusAsync(CardViewModel card, CardStatus status)
+    {
+        var response = await Client.PatchAsJsonAsync($"cards/{card.Id}/status", new ChangeCardStatusModel { Status = status });
+        response.EnsureSuccessStatusCode();
     }
 }

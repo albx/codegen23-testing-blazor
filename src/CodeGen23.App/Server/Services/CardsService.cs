@@ -87,4 +87,16 @@ public class CardsService
         Context.Cards.Remove(card);
         return Context.SaveChangesAsync();
     }
+
+    public Task ChangeCardStatusAsync(int cardId, CardStatus status)
+    {
+        var card = Context.Cards.SingleOrDefault(c => c.Id == cardId);
+        if (card is null)
+        {
+            throw new ArgumentOutOfRangeException();
+        }
+
+        card.Status = (Card.CardStatus)status;
+        return Context.SaveChangesAsync();
+    }
 }

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CodeGen23.App.Server;
 
-public static class RouteGroupBuilderExtensions
+public static class CardApiEndopints
 {
     public static void MapCardsEndpoints(this RouteGroupBuilder source)
     {
@@ -51,6 +51,21 @@ public static class RouteGroupBuilderExtensions
                 try
                 {
                     await service.UpdateCardAsync(id, model);
+                    return Results.NoContent();
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    return Results.NotFound();
+                }
+            }).RequireAuthorization();
+
+        source.MapPatch(
+            "/{id}/status",
+            async (int id, [FromBody] ChangeCardStatusModel model, CardsService service) =>
+            {
+                try
+                {
+                    await service.ChangeCardStatusAsync(id, model.Status);
                     return Results.NoContent();
                 }
                 catch (ArgumentOutOfRangeException)

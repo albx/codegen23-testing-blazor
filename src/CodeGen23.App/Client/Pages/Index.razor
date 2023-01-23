@@ -1,6 +1,7 @@
 ﻿@page "/"
 
 @inject ICardsService Service
+@inject IJSRuntime Js
 @attribute [Authorize]
 
 <PageTitle>My Board</PageTitle>
@@ -8,7 +9,7 @@
 <h1>My Board</h1>
 
 <div class="row">
-    <CreateNewCard OnSave="CreateNewCardAsync"/>
+    <CreateNewCard OnSave="CreateNewCardAsync" />
 </div>
 <hr />
 <div class="row">
@@ -17,7 +18,14 @@
         <hr />
         @foreach (var card in model.ToDo)
         {
-            <CardItem Card="card"/>
+            <CardItem Card="card">
+                <Actions>
+                    <div class="btn btn-group">
+                        <button type="button" @onclick="@(() => StartWorkingAsync(card))" class="btn btn-primary btn-sm">start</button>
+                        <button type="button" class="btn btn-danger btn-sm">delete</button>
+                    </div>
+                </Actions>
+            </CardItem>
         }
     </div>
     <div class="col col-cards">
@@ -25,7 +33,15 @@
         <hr />
         @foreach (var card in model.InProgress)
         {
-            <CardItem Card="card" />
+            <CardItem Card="card">
+                <Actions>
+                    <div class="btn btn-group">
+                        <button type="button" @onclick="@(() => MoveBackAsync(card))" class="btn btn-primary btn-sm">back</button>
+                        <button type="button" @onclick="@(() => CompleteCardAsync(card))" class="btn btn-success btn-sm ">done</button>
+                        <button type="button" class="btn btn-danger btn-sm">delete</button>
+                    </div>
+                </Actions>
+            </CardItem>
         }
     </div>
     <div class="col col-cards">
@@ -67,9 +83,48 @@
             await Service.CreateNewCardAsync(model);
             await LoadCardsAsync();
         }
-        catch (Exception ex)
+        catch 
         {
-            //TODO
+            await Js.InvokeVoidAsync("alert", "Error creating new card");
+        }
+    }
+
+    private async Task StartWorkingAsync(CardViewModel card)
+    {
+        try
+        {
+            await Service.ChangeCardStatusAsync(card, CardStatus.InProgress);
+            await LoadCardsAsync();
+        }
+        catch 
+        {
+            await Js.InvokeVoidAsync("alert", "Error moving card in progress");
+        }
+    }
+
+    private async Task MoveBackAsync(CardViewModel card)
+    {
+        try
+        {
+            await Service.ChangeCardStatusAsync(card, CardStatus.ToDo);
+            await LoadCardsAsync();
+        }
+        catch 
+        {
+            await Js.InvokeVoidAsync("alert", "Error moving back card to ToDo");
+        }
+    }
+
+    private async Task CompleteCardAsync(CardViewModel card)
+    {
+        try
+        {
+            await Service.ChangeCardStatusAsync(card, CardStatus.Done);
+            await LoadCardsAsync();
+        }
+        catch 
+        {
+            await Js.InvokeVoidAsync("alert", "Error completing card");
         }
     }
 
