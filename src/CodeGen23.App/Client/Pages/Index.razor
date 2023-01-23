@@ -22,7 +22,8 @@
                 <Actions>
                     <div class="btn btn-group">
                         <button type="button" @onclick="@(() => StartWorkingAsync(card))" class="btn btn-primary btn-sm">start</button>
-                        <button type="button" class="btn btn-danger btn-sm">delete</button>
+                        <DeleteButton Card="card"
+                                      OnConfirmed="DeleteCardAsync"/>
                     </div>
                 </Actions>
             </CardItem>
@@ -38,7 +39,8 @@
                     <div class="btn btn-group">
                         <button type="button" @onclick="@(() => MoveBackAsync(card))" class="btn btn-primary btn-sm">back</button>
                         <button type="button" @onclick="@(() => CompleteCardAsync(card))" class="btn btn-success btn-sm ">done</button>
-                        <button type="button" class="btn btn-danger btn-sm">delete</button>
+                        <DeleteButton Card="card"
+                                      OnConfirmed="DeleteCardAsync"/>
                     </div>
                 </Actions>
             </CardItem>
@@ -83,7 +85,7 @@
             await Service.CreateNewCardAsync(model);
             await LoadCardsAsync();
         }
-        catch 
+        catch
         {
             await Js.InvokeVoidAsync("alert", "Error creating new card");
         }
@@ -96,7 +98,7 @@
             await Service.ChangeCardStatusAsync(card, CardStatus.InProgress);
             await LoadCardsAsync();
         }
-        catch 
+        catch
         {
             await Js.InvokeVoidAsync("alert", "Error moving card in progress");
         }
@@ -109,7 +111,7 @@
             await Service.ChangeCardStatusAsync(card, CardStatus.ToDo);
             await LoadCardsAsync();
         }
-        catch 
+        catch
         {
             await Js.InvokeVoidAsync("alert", "Error moving back card to ToDo");
         }
@@ -122,9 +124,22 @@
             await Service.ChangeCardStatusAsync(card, CardStatus.Done);
             await LoadCardsAsync();
         }
-        catch 
+        catch
         {
             await Js.InvokeVoidAsync("alert", "Error completing card");
+        }
+    }
+
+    private async Task DeleteCardAsync(CardViewModel card)
+    {
+        try
+        {
+            await Service.DeleteCardAsync(card);
+            await LoadCardsAsync();
+        }
+        catch
+        {
+            await Js.InvokeVoidAsync("alert", "Error deleting card");
         }
     }
 

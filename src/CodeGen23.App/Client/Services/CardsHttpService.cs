@@ -29,4 +29,10 @@ public class CardsHttpService : ICardsService
         var response = await Client.PatchAsJsonAsync($"cards/{card.Id}/status", new ChangeCardStatusModel { Status = status });
         response.EnsureSuccessStatusCode();
     }
+
+    public async Task DeleteCardAsync(CardViewModel card)
+    {
+        var response = await Client.DeleteAsync($"cards/{card.Id}");
+        response.EnsureSuccessStatusCode();
+    }
 }

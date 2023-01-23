@@ -10,4 +10,6 @@ public interface ICardsService
     Task CreateNewCardAsync(CreateCardModel card);
 
     Task ChangeCardStatusAsync(CardViewModel card, CardStatus status);
+
+    Task DeleteCardAsync(CardViewModel card);
 }

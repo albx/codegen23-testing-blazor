@@ -1,0 +1,41 @@
+﻿@implements IAsyncDisposable
+
+@inject IJSRuntime Js
+
+<button type="button" @onclick="DeleteAsync" class="btn btn-danger btn-sm">delete</button>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public CardViewModel Card { get; set; }
+
+    [Parameter]
+    public EventCallback<CardViewModel> OnConfirmed { get; set; }
+
+    private async Task DeleteAsync()
+    {
+        var confirmed = await module.InvokeAsync<bool>("showConfirm", $"You're going to delete {Card.Title}. Are you sure?");
+        if (confirmed)
+        {
+            await OnConfirmed.InvokeAsync(Card);
+        }
+    }
+
+    private IJSObjectReference module;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            module = await Js.InvokeAsync<IJSObjectReference>("import", "./Components/DeleteButton.razor.js");
+        }
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        if (module is not null)
+        {
+            await module.DisposeAsync();
+        }
+    }
+}
