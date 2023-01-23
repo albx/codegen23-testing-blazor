@@ -1,0 +1,47 @@
+﻿@page "/search"
+
+@inject ICardsService Service
+
+<PageTitle>Search results for '@Query'</PageTitle>
+
+<h3>Search results for '@Query'</h3>
+
+@if (cards.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Creation date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var card in cards)
+            {
+                <tr>
+                    <td>@card.Title</td>
+                    <td>@card.CreationDate.ToShortDateString()</td>
+                    <td>@card.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h2>No cards found for '@Query'</h2>
+}
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Query { get; set; } = string.Empty;
+
+    private IEnumerable<CardListItemModel> cards = Enumerable.Empty<CardListItemModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        cards = await Service.SearchCardsAsync(Query);
+    }
+}

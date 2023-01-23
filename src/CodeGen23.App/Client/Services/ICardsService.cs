@@ -12,4 +12,6 @@ public interface ICardsService
     Task ChangeCardStatusAsync(CardViewModel card, CardStatus status);
 
     Task DeleteCardAsync(CardViewModel card);
+
+    Task<IEnumerable<CardListItemModel>> SearchCardsAsync(string query);
 }

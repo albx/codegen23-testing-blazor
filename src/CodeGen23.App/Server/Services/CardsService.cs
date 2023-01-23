@@ -99,4 +99,20 @@ public class CardsService
         card.Status = (Card.CardStatus)status;
         return Context.SaveChangesAsync();
     }
+
+    public IEnumerable<CardListItemModel> SearchCardsByQuery(string query)
+    {
+        var cards = (from c in Context.Cards
+                     let description = c.Description
+                     where c.Title.Contains(query) || (description != null && description.Contains(query))
+                     select new CardListItemModel
+                     {
+                         Id = c.Id,
+                         CreationDate = c.CreationDate,
+                         Status = (CardStatus)c.Status,
+                         Title = c.Title
+                     }).ToArray();
+
+        return cards;
+    }
 }

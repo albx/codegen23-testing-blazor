@@ -17,6 +17,14 @@ public static class CardApiEndopints
             }).RequireAuthorization();
 
         source.MapGet(
+            "/search",
+            ([FromQuery] string query, CardsService service) =>
+            {
+                var cards = service.SearchCardsByQuery(query);
+                return Results.Ok(cards);
+            });
+
+        source.MapGet(
             "/{id}",
             (int id, CardsService service) =>
             {

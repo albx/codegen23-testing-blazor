@@ -35,4 +35,12 @@ public class CardsHttpService : ICardsService
         var response = await Client.DeleteAsync($"cards/{card.Id}");
         response.EnsureSuccessStatusCode();
     }
+
+    public async Task<IEnumerable<CardListItemModel>> SearchCardsAsync(string query)
+    {
+        var cards = await Client.GetFromJsonAsync<IEnumerable<CardListItemModel>>(
+            $"cards/search?query={System.Web.HttpUtility.UrlEncode(query)}");
+
+        return cards ?? Enumerable.Empty<CardListItemModel>();
+    }
 }

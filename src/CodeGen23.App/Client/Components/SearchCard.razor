@@ -1,0 +1,24 @@
+﻿@inject NavigationManager NavigationManager
+
+<EditForm Model="model" role="form" OnValidSubmit="PerformSearch">
+    <div class="input-group">
+        <InputText @bind-Value="model.Query" class="form-control" placeholder="Type here to search a card" aria-describedby="search-button" />
+        <button class="btn btn-outline-secondary" type="submit" id="search-button">Search</button>
+    </div>
+</EditForm>
+
+@code {
+    private ViewModel model = new();
+
+
+    private void PerformSearch()
+    {
+        NavigationManager.NavigateTo($"search?query={System.Web.HttpUtility.UrlEncode(model.Query)}");
+    }
+
+    class ViewModel
+    {
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Query { get; set; } = string.Empty;
+    }
+}
