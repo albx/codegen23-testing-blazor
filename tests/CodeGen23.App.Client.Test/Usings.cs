@@ -1,1 +1,9 @@
+global using Bunit;
+global using Bunit.TestDoubles;
+global using CodeGen23.App.Client.Components;
+global using CodeGen23.App.Client.Pages;
+global using CodeGen23.App.Client.Services;
+global using CodeGen23.App.Shared;
+global using Microsoft.Extensions.DependencyInjection;
+global using Moq;
 global using Xunit;
