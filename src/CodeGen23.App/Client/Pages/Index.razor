@@ -26,7 +26,7 @@
             <CardItem Card="card">
                 <Actions>
                     <div class="btn btn-group">
-                        <button type="button" @onclick="@(() => StartWorkingAsync(card))" class="btn btn-primary btn-sm">start</button>
+                        <button id="start-card-@card.Id" type="button" @onclick="@(() => StartWorkingAsync(card))" class="btn btn-primary btn-sm">start</button>
                         <DeleteButton Card="card"
                                       OnConfirmed="DeleteCardAsync"/>
                     </div>
@@ -42,8 +42,8 @@
             <CardItem Card="card">
                 <Actions>
                     <div class="btn btn-group">
-                        <button type="button" @onclick="@(() => MoveBackAsync(card))" class="btn btn-primary btn-sm">back</button>
-                        <button type="button" @onclick="@(() => CompleteCardAsync(card))" class="btn btn-success btn-sm ">done</button>
+                        <button id="moveback-card-@card.Id" type="button" @onclick="@(() => MoveBackAsync(card))" class="btn btn-primary btn-sm">back</button>
+                        <button id="complete-card-@card.Id" type="button" @onclick="@(() => CompleteCardAsync(card))" class="btn btn-success btn-sm ">done</button>
                         <DeleteButton Card="card"
                                       OnConfirmed="DeleteCardAsync"/>
                     </div>

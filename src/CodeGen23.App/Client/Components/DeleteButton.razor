@@ -2,7 +2,7 @@
 
 @inject IJSRuntime Js
 
-<button type="button" @onclick="DeleteAsync" class="btn btn-danger btn-sm">delete</button>
+<button id="delete-card-@Card.Id" type="button" @onclick="DeleteAsync" class="btn btn-danger btn-sm">delete</button>
 
 @code {
     [Parameter]

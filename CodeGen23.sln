@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGen23.App.Shared", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGen23.Core", "src\CodeGen23.Core\CodeGen23.Core.csproj", "{FBBAC586-80B2-433D-814E-2FC6173444D3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{898F72EC-203A-403A-94C0-2A1DA1448F49}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGen23.App.Client.Test", "tests\CodeGen23.App.Client.Test\CodeGen23.App.Client.Test.csproj", "{9DAA169E-92C4-40B5-B74E-DF53EBDFDE4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +39,10 @@ Global
 		{FBBAC586-80B2-433D-814E-2FC6173444D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBBAC586-80B2-433D-814E-2FC6173444D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBBAC586-80B2-433D-814E-2FC6173444D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DAA169E-92C4-40B5-B74E-DF53EBDFDE4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DAA169E-92C4-40B5-B74E-DF53EBDFDE4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DAA169E-92C4-40B5-B74E-DF53EBDFDE4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DAA169E-92C4-40B5-B74E-DF53EBDFDE4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +52,7 @@ Global
 		{E67920DA-500B-4071-A7B6-5DB058DD5DE2} = {09A62167-E56D-4357-AB3D-5E250D2A0A87}
 		{DB487774-2969-47C2-869C-F81AE0110418} = {09A62167-E56D-4357-AB3D-5E250D2A0A87}
 		{FBBAC586-80B2-433D-814E-2FC6173444D3} = {09A62167-E56D-4357-AB3D-5E250D2A0A87}
+		{9DAA169E-92C4-40B5-B74E-DF53EBDFDE4A} = {898F72EC-203A-403A-94C0-2A1DA1448F49}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {931D9136-FB7D-455D-85A5-B5578D548CB5}
