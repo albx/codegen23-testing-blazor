@@ -1,14 +1,38 @@
-﻿
+﻿@inherits TestContext
+
 @code {
     [Fact]
     public void CreateNewCard_Should_Display_Validation_Message_If_Form_Is_Invalid()
     {
-        throw new NotImplementedException();
+        var component = Render(@<CodeGen23.App.Client.Components.CreateNewCard />);
+
+        var form = component.Find("form");
+        form.Submit();
+
+        var validationMessageDiv = component.Find("div.text-danger");
+        Assert.Equal("The Title field is required.", validationMessageDiv.TextContent);
     }
 
     [Fact]
     public void CreateNewCard_Should_Invoke_OnSave_Callback_If_Form_Is_Valid()
     {
-        throw new NotImplementedException();
+        CreateCardModel? expectedCard = null;
+
+        Action<CreateCardModel> saveHandler = card => expectedCard = card;
+
+        var component = Render(@<CodeGen23.App.Client.Components.CreateNewCard OnSave="saveHandler" />);
+
+        var form = component.Find("form");
+
+        var titleTextField = component.Find("input#newcard-title");
+        titleTextField.Change("Demo Codegen 2023");
+
+        var descriptionTextField = component.Find("input#newcard-description");
+        descriptionTextField.Change("Demo Codegen 2023 description");
+
+        form.Submit();
+
+        Assert.Equal(expectedCard?.Title, "Demo Codegen 2023");
+        Assert.Equal(expectedCard?.Description, "Demo Codegen 2023 description");
     }
 }

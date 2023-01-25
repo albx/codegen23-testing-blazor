@@ -1,6 +1,7 @@
 global using Bunit;
 global using Bunit.TestDoubles;
 global using CodeGen23.App.Client.Components;
+global using CodeGen23.App.Client.Model;
 global using CodeGen23.App.Client.Pages;
 global using CodeGen23.App.Client.Services;
 global using CodeGen23.App.Shared;

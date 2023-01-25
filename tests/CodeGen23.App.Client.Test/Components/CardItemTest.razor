@@ -1,14 +1,38 @@
-﻿
+﻿@inherits TestContext
+
 @code {
     [Fact]
     public void CardItem_Should_Set_Parameter_With_Specified_Instance()
     {
-        throw new NotImplementedException();
+        var card = new CardViewModel { Id = 1, Title = "test", CreationDate = DateTime.Now };
+
+        var component = RenderComponent<CardItem>(
+            parameters => parameters.Add(p => p.Card, card));
+
+        Assert.Equal(card.Id, component.Instance.Card.Id);
+        Assert.Equal(card.Title, component.Instance.Card.Title);
+        Assert.Equal(card.CreationDate, component.Instance.Card.CreationDate);
     }
 
     [Fact]
     public void CardItem_Should_Render_Specified_Markup_Correctly()
     {
-        throw new NotImplementedException();
+        var card = new CardViewModel { Id = 1, Title = "test", CreationDate = DateTime.Now };
+
+        var component = Render(
+        @<CodeGen23.App.Client.Components.CardItem Card="card">
+            <Actions>
+                <button type="button">click me</button>
+            </Actions>
+        </CodeGen23.App.Client.Components.CardItem>);
+
+        component.MarkupMatches(
+        @<div class="card" id="card-1">
+            <div class="card-body">
+                <h5 class="card-title">@card.Title</h5>
+                <h6 class="card-subtitle mb-2 text-muted">created on @card.CreationDate.ToShortDateString()</h6>
+                <button type="button">click me</button>
+            </div>
+        </div>);
     }
 }

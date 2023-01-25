@@ -1,14 +1,42 @@
-﻿
+﻿@inherits TestContext
+
 @code {
     [Fact]
     public void DeleteButton_Should_Invoke_OnConfirmed_Callback_If_User_Confirm_Choice()
     {
-        throw new NotImplementedException();
+        CardViewModel? expectedCard = null;
+        Action<CardViewModel> confirmedHandler = card => expectedCard = card;
+
+        var card = new CardViewModel { Id = 1, Title = "test", CreationDate = DateTime.Now };
+        
+        JSInterop
+            .SetupModule("./Components/DeleteButton.razor.js")
+            .Setup<bool>("showConfirm", "You're going to delete test. Are you sure?").SetResult(true);
+
+        var component = Render(@<CodeGen23.App.Client.Components.DeleteButton Card="card" OnConfirmed="confirmedHandler" />);
+
+        var deleteButton = component.Find("button#delete-card-1");
+        deleteButton.Click();
+
+        Assert.NotNull(expectedCard);
+        Assert.Equal(expectedCard.Id, card.Id);
     }
 
     [Fact]
-    public async Task DeleteButton_Should_Invoke_Dispose_Correctly()
+    public void DeleteButton_Should_Invoke_Dispose_Correctly()
     {
-        throw new NotImplementedException();
+        CardViewModel? expectedCard = null;
+        Action<CardViewModel> confirmedHandler = card => expectedCard = card;
+
+        var card = new CardViewModel { Id = 1, Title = "test", CreationDate = DateTime.Now };
+        
+        JSInterop
+            .SetupModule("./Components/DeleteButton.razor.js")
+            .Setup<bool>("showConfirm", "You're going to delete test. Are you sure?").SetResult(false);
+
+        var component = Render(@<CodeGen23.App.Client.Components.DeleteButton Card="card" OnConfirmed="confirmedHandler" />);
+        component.Dispose();
+
+        Assert.Throws<Bunit.Rendering.ComponentDisposedException>(() => component.Find("button#delete-card-1"));
     }
 }

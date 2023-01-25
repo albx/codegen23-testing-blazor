@@ -2,12 +2,12 @@
     <DataAnnotationsValidator />
     <div class="col">
         <label>Title</label>
-        <InputText class="form-control" @bind-Value="model.Title" />
+        <InputText class="form-control" @bind-Value="model.Title" id="newcard-title" />
         <ValidationMessage For="@(() => model.Title)" class="text-danger" />
     </div>
     <div class="col">
         <label>Description</label>
-        <InputText class="form-control" @bind-Value="model.Description" />
+        <InputText class="form-control" @bind-Value="model.Description" id="newcard-description" />
         <ValidationMessage For="@(() => model.Description)" class="text-danger" />
     </div>
     <div class="col-auto" style="display: flex; align-items: end;">
