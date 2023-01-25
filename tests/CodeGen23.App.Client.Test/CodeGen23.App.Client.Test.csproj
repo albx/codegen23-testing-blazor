@@ -39,4 +39,8 @@
     <None Include="Components\CardItemTest.razor" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CodeGen23.App\Client\CodeGen23.App.Client.csproj" />
+  </ItemGroup>
+
 </Project>
