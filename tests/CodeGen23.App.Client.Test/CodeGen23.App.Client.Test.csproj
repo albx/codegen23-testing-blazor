@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -7,10 +7,6 @@
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Content Remove="Components\CardItemTest.razor" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="bunit" Version="1.14.4" />
@@ -25,18 +21,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Components\CardItemTest.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Components\CardItemTest.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Components\CardItemTest.razor" />
   </ItemGroup>
 
   <ItemGroup>
