@@ -3,24 +3,169 @@
     [Fact]
     public void Index_Should_Display_New_Created_Card_As_ToDo()
     {
-        throw new NotImplementedException();
+        var cards = new List<CardListItemModel>();
+
+        using var ctx = new TestContext();
+        ctx.AddTestAuthorization();
+
+        var serviceMock = new Mock<ICardsService>();
+        serviceMock.Setup(s => s.GetCardsAsync()).ReturnsAsync(() => cards);
+        serviceMock.Setup(s => s.CreateNewCardAsync(It.IsAny<CreateCardModel>()))
+            .Callback((CreateCardModel card) =>
+            {
+                cards.Add(new CardListItemModel { Id = 1, Title = card.Title, CreationDate = DateTime.Now, Status = CardStatus.ToDo });
+            });
+
+        ctx.Services.AddSingleton(serviceMock.Object);
+
+        ctx.ComponentFactories.AddStub<SearchCard>();
+        ctx.JSInterop.SetupModule("./Components/DeleteButton.razor.js");
+
+        var component = ctx.Render(@<CodeGen23.App.Client.Pages.Index />);
+
+        var createCardForm = component.Find("form");
+        var cardTitleTextField = component.Find("form input#newcard-title");
+        cardTitleTextField.Change("my new card");
+        createCardForm.Submit();
+
+        serviceMock.Verify(s => s.CreateNewCardAsync(It.Is<CreateCardModel>(c => c.Title == "my new card")), Times.Once);
+
+        var todoCards = component.FindAll("div#todo div.card");
+        var inProgressCards = component.FindAll("div#in-progress div.card");
+        var doneCards = component.FindAll("div#done div.card");
+
+        Assert.Single(todoCards);
+        Assert.Empty(inProgressCards);
+        Assert.Empty(doneCards);
     }
 
     [Fact]
     public void Index_Should_Move_Card_To_InProgress_When_Click_On_Start_Button()
     {
-        throw new NotImplementedException();
+        var cards = new List<CardListItemModel>
+        {
+            new CardListItemModel { Id = 1, Title = "test", CreationDate = DateTime.Now, Status = CardStatus.ToDo }
+        };
+
+        using var ctx = new TestContext();
+        ctx.AddTestAuthorization();
+
+        var serviceMock = new Mock<ICardsService>();
+        serviceMock.Setup(s => s.GetCardsAsync()).ReturnsAsync(() => cards);
+        serviceMock.Setup(s => s.ChangeCardStatusAsync(It.IsAny<CardViewModel>(), It.IsAny<CardStatus>()))
+            .Callback((CardViewModel card, CardStatus status) =>
+            {
+                var cardFromList = cards.FirstOrDefault(c => c.Id == card.Id);
+                if (cardFromList is not null)
+                {
+                    cardFromList.Status = status;
+                }
+            });
+
+        ctx.Services.AddSingleton(serviceMock.Object);
+
+        ctx.ComponentFactories
+            .AddStub<SearchCard>()
+            .AddStub<CreateNewCard>();
+
+        ctx.JSInterop.SetupModule("./Components/DeleteButton.razor.js");
+
+        var component = ctx.Render(@<CodeGen23.App.Client.Pages.Index />);
+
+        var startCardButton = component.Find("div#todo div#card-1 button#start-card-1");
+        startCardButton.Click();
+
+        var todoCards = component.FindAll("div#todo div.card");
+        var inProgressCards = component.FindAll("div#in-progress div.card");
+
+        Assert.Empty(todoCards);
+        Assert.Single(inProgressCards);
     }
 
     [Fact]
     public void Index_Should_Move_Card_To_Done_When_Click_On_Complete_Button()
     {
-        throw new NotImplementedException();
+        var cards = new List<CardListItemModel>
+        {
+            new CardListItemModel { Id = 1, Title = "test", CreationDate = DateTime.Now, Status = CardStatus.InProgress }
+        };
+
+        using var ctx = new TestContext();
+        ctx.AddTestAuthorization();
+
+        var serviceMock = new Mock<ICardsService>();
+        serviceMock.Setup(s => s.GetCardsAsync()).ReturnsAsync(() => cards);
+        serviceMock.Setup(s => s.ChangeCardStatusAsync(It.IsAny<CardViewModel>(), It.IsAny<CardStatus>()))
+            .Callback((CardViewModel card, CardStatus status) =>
+            {
+                var cardFromList = cards.FirstOrDefault(c => c.Id == card.Id);
+                if (cardFromList is not null)
+                {
+                    cardFromList.Status = status;
+                }
+            });
+
+        ctx.Services.AddSingleton(serviceMock.Object);
+
+        ctx.ComponentFactories
+            .AddStub<SearchCard>()
+            .AddStub<CreateNewCard>();
+
+        ctx.JSInterop.SetupModule("./Components/DeleteButton.razor.js");
+
+        var component = ctx.Render(@<CodeGen23.App.Client.Pages.Index />);
+
+        var completeCardButton = component.Find("div#in-progress div#card-1 button#complete-card-1");
+        completeCardButton.Click();
+
+        var inProgressCards = component.FindAll("div#in-progress div.card");
+        var doneCards = component.FindAll("div#done div.card");
+
+        Assert.Empty(inProgressCards);
+        Assert.Single(doneCards);
     }
 
     [Fact]
     public void Index_Should_Remove_Card_When_Click_On_Delete_Button_And_Confirmed_Choice()
     {
-        throw new NotImplementedException();
+        var cards = new List<CardListItemModel>
+        {
+            new CardListItemModel { Id = 1, Title = "test", CreationDate = DateTime.Now, Status = CardStatus.ToDo }
+        };
+
+        using var ctx = new TestContext();
+        ctx.AddTestAuthorization();
+
+        var serviceMock = new Mock<ICardsService>();
+        serviceMock.Setup(s => s.GetCardsAsync()).ReturnsAsync(() => cards);
+        serviceMock.Setup(s => s.DeleteCardAsync(It.IsAny<CardViewModel>()))
+            .Callback((CardViewModel card) =>
+            {
+                var cardToRemove = cards.FirstOrDefault(c => c.Id == card.Id);
+                if (cardToRemove is not null)
+                {
+                    cards.Remove(cardToRemove);
+                }
+            });
+
+        ctx.Services.AddSingleton(serviceMock.Object);
+
+        ctx.ComponentFactories
+            .AddStub<SearchCard>()
+            .AddStub<CreateNewCard>();
+
+        ctx.JSInterop.SetupModule("./Components/DeleteButton.razor.js")
+            .Setup<bool>("showConfirm", "You're going to delete test. Are you sure?")
+            .SetResult(true);
+
+        var component = ctx.Render(@<CodeGen23.App.Client.Pages.Index />);
+
+        var deleteCardButton = component.Find("div#todo div#card-1 button#delete-card-1");
+        deleteCardButton.Click();
+
+        serviceMock.Verify(s => s.DeleteCardAsync(It.Is<CardViewModel>(c => c.Id == 1)), Times.Once);
+
+        var todoCards = component.FindAll("div#todo div.card");
+        Assert.Empty(todoCards);
     }
 }

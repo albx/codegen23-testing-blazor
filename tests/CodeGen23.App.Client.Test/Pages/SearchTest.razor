@@ -3,12 +3,48 @@
     [Fact]
     public void Search_Should_Display_No_Items_Markup_If_Search_Result_Is_Empty()
     {
-        throw new NotImplementedException();
+        string query = "My search";
+        using var ctx = new TestContext();
+
+        var serviceMock = new Mock<ICardsService>();
+        serviceMock.Setup(s => s.SearchCardsAsync(query)).ReturnsAsync(Enumerable.Empty<CardListItemModel>());
+
+        ctx.Services.AddSingleton(serviceMock.Object);
+
+        var component = ctx.Render(@<CodeGen23.App.Client.Pages.Search Query="@query" />);
+        component.MarkupMatches(@<text>
+            <h3>Search results for '@query'</h3>
+            <h2>No cards found for '@query'</h2>
+        </text>);
     }
 
     [Fact]
     public void Search_Should_Display_Items_Found_For_Specified_Query()
     {
-        throw new NotImplementedException();
+        var cards = new List<CardListItemModel>
+        {
+            new CardListItemModel { Id = 1, Title = "preparare demo Codegen 2023", CreationDate = DateTime.Now, Status = CardStatus.InProgress },
+            new CardListItemModel { Id = 2, Title = "preparare la cena", CreationDate = DateTime.Now, Status = CardStatus.InProgress },
+            new CardListItemModel { Id = 3, Title = "slide per Codegen 2023", CreationDate = DateTime.Now, Status = CardStatus.ToDo },
+            new CardListItemModel { Id = 4, Title = "live coding del sabato", CreationDate = DateTime.Now, Status = CardStatus.ToDo },
+            new CardListItemModel { Id = 5, Title = "task a caso", CreationDate = DateTime.Now, Status = CardStatus.Done }
+        };
+
+        string query = "Codegen 2023";
+        using var ctx = new TestContext();
+
+        var serviceMock = new Mock<ICardsService>();
+        serviceMock.Setup(s => s.SearchCardsAsync(query))
+            .ReturnsAsync(cards.Where(c => c.Title.Contains(query, StringComparison.InvariantCultureIgnoreCase)));
+
+        ctx.Services.AddSingleton(serviceMock.Object);
+
+        var component = ctx.Render(@<CodeGen23.App.Client.Pages.Search Query="@query" />);
+
+        var tableTitleCells = component.FindAll("table > tbody > tr > td:first-child");
+
+        Assert.All(
+            tableTitleCells,
+            cell => Assert.Contains(query, cell.TextContent));
     }
 }

@@ -1,8 +1,16 @@
-﻿
+﻿@inherits TestContext
+
 @code {
     [Fact]
     public void LoginDisplay_Should_Display_Authenticated_User_Name()
     {
-        throw new NotImplementedException();
+        this.AddTestAuthorization().SetAuthorized("albx");
+
+        var component = Render(@<CodeGen23.App.Client.Shared.LoginDisplay />);
+
+        component.MarkupMatches(@<text>
+            <a href="authentication/profile">Hello, albx!</a>
+            <button class="nav-link btn btn-link">Log out</button>
+            </text>);
     }
 }

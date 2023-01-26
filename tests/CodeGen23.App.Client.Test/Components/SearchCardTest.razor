@@ -1,8 +1,26 @@
-﻿
+﻿@inherits TestContext
+
 @code {
     [Fact]
     public void SearchCard_Should_Navigate_To_Search_Page_On_Form_Submit()
     {
-        throw new NotImplementedException();
+        var query = "Demo for Codegen 2023";
+
+        var component = Render(@<CodeGen23.App.Client.Components.SearchCard />);
+
+        var form = component.Find("form");
+
+        var searchTextField = component.Find("input");
+        searchTextField.Change(query);
+
+        form.Submit();
+
+        var navigationManager = Services.GetRequiredService<FakeNavigationManager>();
+
+        var expectedUrl = navigationManager
+            .ToAbsoluteUri($"search?query={System.Web.HttpUtility.UrlEncode(query)}")
+            .ToString();
+
+        Assert.Equal(expectedUrl, navigationManager.Uri);
     }
 }

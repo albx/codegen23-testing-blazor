@@ -18,7 +18,7 @@
 </div>
 <hr />
 <div class="row">
-    <div class="col col-cards">
+    <div class="col col-cards" id="todo">
         <h5>To do</h5>
         <hr />
         @foreach (var card in model.ToDo)
@@ -34,7 +34,7 @@
             </CardItem>
         }
     </div>
-    <div class="col col-cards">
+    <div class="col col-cards" id="in-progress">
         <h5>In progress</h5>
         <hr />
         @foreach (var card in model.InProgress)
@@ -51,7 +51,7 @@
             </CardItem>
         }
     </div>
-    <div class="col col-cards">
+    <div class="col col-cards" id="done">
         <h5>Done</h5>
         <hr />
         @foreach (var card in model.Done)
