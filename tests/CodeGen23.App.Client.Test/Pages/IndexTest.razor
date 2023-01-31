@@ -21,7 +21,7 @@
         ctx.ComponentFactories.AddStub<SearchCard>();
         ctx.JSInterop.SetupModule("./Components/DeleteButton.razor.js");
 
-        var component = ctx.Render(@<CodeGen23.App.Client.Pages.Index />);
+        var component = ctx.Render(@<Index />);
 
         var createCardForm = component.Find("form");
         var cardTitleTextField = component.Find("form input#newcard-title");
@@ -70,7 +70,7 @@
 
         ctx.JSInterop.SetupModule("./Components/DeleteButton.razor.js");
 
-        var component = ctx.Render(@<CodeGen23.App.Client.Pages.Index />);
+        var component = ctx.Render(@<Index />);
 
         var startCardButton = component.Find("div#todo div#card-1 button#start-card-1");
         startCardButton.Click();
@@ -113,7 +113,7 @@
 
         ctx.JSInterop.SetupModule("./Components/DeleteButton.razor.js");
 
-        var component = ctx.Render(@<CodeGen23.App.Client.Pages.Index />);
+        var component = ctx.Render(@<Index />);
 
         var completeCardButton = component.Find("div#in-progress div#card-1 button#complete-card-1");
         completeCardButton.Click();
@@ -158,7 +158,7 @@
             .Setup<bool>("showConfirm", "You're going to delete test. Are you sure?")
             .SetResult(true);
 
-        var component = ctx.Render(@<CodeGen23.App.Client.Pages.Index />);
+        var component = ctx.Render(@<Index />);
 
         var deleteCardButton = component.Find("div#todo div#card-1 button#delete-card-1");
         deleteCardButton.Click();

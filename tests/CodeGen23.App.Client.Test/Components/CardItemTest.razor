@@ -20,19 +20,19 @@
         var card = new CardViewModel { Id = 1, Title = "test", CreationDate = DateTime.Now };
 
         var component = Render(
-        @<CodeGen23.App.Client.Components.CardItem Card="card">
-            <Actions>
-                <button type="button">click me</button>
-            </Actions>
-        </CodeGen23.App.Client.Components.CardItem>);
+            @<CardItem Card="card">
+                <Actions>
+                    <button type="button">click me</button>
+                </Actions>
+            </CardItem>);
 
         component.MarkupMatches(
-        @<div class="card" id="card-1">
-            <div class="card-body">
-                <h5 class="card-title">@card.Title</h5>
-                <h6 class="card-subtitle mb-2 text-muted">created on @card.CreationDate.ToShortDateString()</h6>
-                <button type="button">click me</button>
-            </div>
-        </div>);
+            @<div class="card" id="card-1">
+                <div class="card-body">
+                    <h5 class="card-title">@card.Title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">created on @card.CreationDate.ToShortDateString()</h6>
+                    <button type="button">click me</button>
+                </div>
+            </div>);
     }
 }

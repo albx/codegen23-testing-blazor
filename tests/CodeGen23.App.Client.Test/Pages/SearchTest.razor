@@ -11,7 +11,7 @@
 
         ctx.Services.AddSingleton(serviceMock.Object);
 
-        var component = ctx.Render(@<CodeGen23.App.Client.Pages.Search Query="@query" />);
+        var component = ctx.Render(@<Search Query="@query" />);
         component.MarkupMatches(@<text>
             <h3>Search results for '@query'</h3>
             <h2>No cards found for '@query'</h2>
@@ -39,7 +39,7 @@
 
         ctx.Services.AddSingleton(serviceMock.Object);
 
-        var component = ctx.Render(@<CodeGen23.App.Client.Pages.Search Query="@query" />);
+        var component = ctx.Render(@<Search Query="@query" />);
 
         var tableTitleCells = component.FindAll("table > tbody > tr > td:first-child");
 

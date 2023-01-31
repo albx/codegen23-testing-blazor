@@ -13,7 +13,7 @@
             .SetupModule("./Components/DeleteButton.razor.js")
             .Setup<bool>("showConfirm", "You're going to delete test. Are you sure?").SetResult(true);
 
-        var component = Render(@<CodeGen23.App.Client.Components.DeleteButton Card="card" OnConfirmed="confirmedHandler" />);
+        var component = Render(@<DeleteButton Card="card" OnConfirmed="confirmedHandler" />);
 
         var deleteButton = component.Find("button#delete-card-1");
         deleteButton.Click();
@@ -34,7 +34,7 @@
             .SetupModule("./Components/DeleteButton.razor.js")
             .Setup<bool>("showConfirm", "You're going to delete test. Are you sure?").SetResult(false);
 
-        var component = Render(@<CodeGen23.App.Client.Components.DeleteButton Card="card" OnConfirmed="confirmedHandler" />);
+        var component = Render(@<DeleteButton Card="card" OnConfirmed="confirmedHandler" />);
         component.Dispose();
 
         Assert.Throws<Bunit.Rendering.ComponentDisposedException>(() => component.Find("button#delete-card-1"));

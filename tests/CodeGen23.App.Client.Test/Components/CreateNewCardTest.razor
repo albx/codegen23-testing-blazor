@@ -4,7 +4,7 @@
     [Fact]
     public void CreateNewCard_Should_Display_Validation_Message_If_Form_Is_Invalid()
     {
-        var component = Render(@<CodeGen23.App.Client.Components.CreateNewCard />);
+        var component = Render(@<CreateNewCard />);
 
         var form = component.Find("form");
         form.Submit();
@@ -20,7 +20,7 @@
 
         Action<CreateCardModel> saveHandler = card => expectedCard = card;
 
-        var component = Render(@<CodeGen23.App.Client.Components.CreateNewCard OnSave="saveHandler" />);
+        var component = Render(@<CreateNewCard OnSave="saveHandler" />);
 
         var form = component.Find("form");
 
